@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mth_app/pages/differential.dart';
 import 'package:mth_app/pages/factorial.dart';
 import 'package:mth_app/pages/matrices.dart';
 import 'package:mth_app/pages/series.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -40,11 +42,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final List<String> buttonNames = ['Series', 'Factorial', 'Matrices'];
+    final List<String> buttonNames = ['Series', 'Factorial', 'Matrices', 'Differential Equations'];
     final List<Function()?> navigationFunctions = [
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SeriesPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FactorialPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MatricesPage())),
+      () => Navigator.push(context, MaterialPageRoute(builder: (context) => DifferentialPage())),
     ];
 
     return Scaffold(
@@ -88,7 +91,7 @@ class HomePage extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                   separatorBuilder: (BuildContext context, int index) {
                     return const SizedBox(
-                        height: 20); // Adjust the height as needed for spacing
+                        height: 20);
                   },
                 ),
               ),
