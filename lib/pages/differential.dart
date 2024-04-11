@@ -1,13 +1,33 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 // ignore: must_be_immutable
-class DifferentialPage extends StatelessWidget {
+class DifferentialPage extends StatefulWidget {
   DifferentialPage({super.key});
+
+  @override
+  State<DifferentialPage> createState() => _DifferentialPageState();
+}
+
+class _DifferentialPageState extends State<DifferentialPage> {
 
   String yinit = '';
   String h = '';
   String tinit = '';
   String tfinal = '';
+  List<List<double>> euler(double tinit, double tfinal, double yinit, double h) {
+  f(double t, double y) => 4 * exp(0.8 * t) - 0.5 * y;
+  int N = (tfinal - tinit) ~/ h;
+  y.add(yinit);
+  t.add(tinit);
+  for (int i = 1; i < N + 1; i++) {
+    t.add(((t[i - 1] + h) * 10).round() / 10);
+    y.add(y[i - 1] + h * f(t[i - 1], y[i - 1]));
+  }
+  return [y, t];
+}
+  List<double> y = [];
+  List<double> t = [];
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +48,15 @@ class DifferentialPage extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: Container(
-                alignment: Alignment.center,
+              child: FittedBox(
+                child: Container(alignment: Alignment.center,
                 margin: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                 decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: Colors.grey)),
-                child: const Text(
-                  'code displayed here',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 30),
+                border: Border.all(width: 1, color: Colors.grey)),
+              child: const Image(image: AssetImage('images/Euler_Code.png'),
                 ),
-              ),
+              ),),
+
             ),
             Expanded(
               child: Container(
@@ -173,8 +191,21 @@ class DifferentialPage extends StatelessWidget {
                     ),
                     ElevatedButton(
                         onPressed: () {
+                          setState(() {
+                          double tinitValue = double.parse(tinit);
+                          double tfinalValue = double.parse(tfinal);
+                          double yinitValue = double.parse(yinit);
+                          double hValue = double.parse(h);
+                          y = [];
+                          t = [];
+                          List<List<double>> result = euler(
+                          tinitValue, tfinalValue, yinitValue, hValue);
+                          y=result[0];
+                          t = result[1];
+                          });
+                          int ylength = y.length;
                           debugPrint(
-                              'h = $h, tinit = $tinit, tfinal = $tfinal, yinit = $yinit');
+                              'h = $h, tinit = $tinit, tfinal = $tfinal, yinit = $yinit, yone = ${y[1]}, ylength=$ylength');
                         },
                         child: const Text('Calculate')),
                   ],
@@ -187,7 +218,7 @@ class DifferentialPage extends StatelessWidget {
                 margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                 //decoration: BoxDecoration(border: Border.all(width: 1)),
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
                           margin: const EdgeInsets.only(top: 20),
@@ -201,20 +232,17 @@ class DifferentialPage extends StatelessWidget {
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
-                          )),
-                      const SizedBox(height: 20),
-                      Expanded(
-                        child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(width: 1.0, color: Colors.grey)),
-                            child: const Text(
-                              'output shown here',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 30),
-                            )),
-                      )
+                          ),
+                          ),
+                      Text(
+                        'y = $y \n t=$t',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      
                     ]),
               ),
             ),
