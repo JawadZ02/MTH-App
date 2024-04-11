@@ -217,8 +217,7 @@ class _DifferentialPageState extends State<DifferentialPage> {
                 alignment: Alignment.center,
                 margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                 //decoration: BoxDecoration(border: Border.all(width: 1)),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Column( 
                     children: [
                       Container(
                           margin: const EdgeInsets.only(top: 20),
@@ -234,16 +233,40 @@ class _DifferentialPageState extends State<DifferentialPage> {
                                 color: Colors.white),
                           ),
                           ),
-                      Text(
-                        'y = $y \n t=$t',
+                          Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          alignment: Alignment.topCenter,
+                          decoration: BoxDecoration(
+                              color: Colors.teal[200],
+                              borderRadius: BorderRadius.circular(20.0)),
+                          child:  Text(
+                        'y = $y',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                          ),
+                      Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          alignment: Alignment.topCenter,
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 0, 120, 228),
+                              borderRadius: BorderRadius.circular(20.0),),
+                          child:  Text(
+                        't=$t',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                          ),
                       
-                    ]),
+                    ]
+                    
+                    ),
               ),
             ),
           ],
