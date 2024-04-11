@@ -283,28 +283,7 @@ class _DifferentialPageState extends State<DifferentialPage> {
                                 color: Colors.white),
                           ),
                           ),
-                          Container(
-                          margin: const EdgeInsets.only(top: 20),
-                          alignment: Alignment.topCenter,
-                          decoration: BoxDecoration(
-                              color: Colors.teal[200],
-                              borderRadius: BorderRadius.circular(20.0)),
-                          child:  Text(
-                        'y = ${y.map((double value) => value.toStringAsFixed(4)).join(', ')}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                          ),
-                      Container(
-                          margin: const EdgeInsets.only(top: 20),
-                          alignment: Alignment.topCenter,
-                          decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 0, 120, 228),
-                              borderRadius: BorderRadius.circular(20.0),),
-                          child:  Text(
+                          Text(
                         't = ${t.map((double value) => value.toStringAsFixed(0)).join(', ')}',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
@@ -312,7 +291,14 @@ class _DifferentialPageState extends State<DifferentialPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                          ),
+                      Text(
+                        'y = ${y.map((double value) => value.toStringAsFixed(0)).join(', ')}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       
                     ]
                     
