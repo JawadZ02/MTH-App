@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/widgets.dart';
 
 class DifferentialPage extends StatefulWidget {
   const DifferentialPage({super.key});
@@ -23,6 +22,8 @@ class _DifferentialPageState extends State<DifferentialPage> {
 
   List<List<double>> euler(
       double tinit, double tfinal, double yinit, double h) {
+    List<double> y = [];
+    List<double> t = [];
     f(double t, double y) => 4 * exp(0.8 * t) - 0.5 * y;
     int N = (tfinal - tinit) ~/ h;
     y.add(yinit);

@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SeriesPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FactorialPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MatricesPage())),
-      () => Navigator.push(context, MaterialPageRoute(builder: (context) => DifferentialPage())),
+      () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DifferentialPage())),
     ];
 
     return Scaffold(
