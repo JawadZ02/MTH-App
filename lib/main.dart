@@ -48,18 +48,18 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final List<String> buttonNames = ['Arithmetic', 'Boolean Algebra', 'Complex Numbers', 'Differential Equations', 'Factorial', 'Linear Systems', 'Matrices', '2nd order Polynomials', 'Series', 'Vectors'];
+    final List<String> buttonNames = ['Arithmetic', 'Boolean Algebra', 'Complex Numbers', 'Differential Equations', 'Factorial', 'Matrices', 'Series', 'Simultaneous Equations', 'Vectors' , '2nd order Polynomials'];
     final List<Function()?> navigationFunctions = [
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ArithmeticPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const BooleanPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ComplexPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DifferentialPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FactorialPage())),
-      () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LinearsystemsPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MatricesPage())),
-      () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PolynomialPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SeriesPage())),
+      () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LinearsystemsPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VectorsPage())),
+      () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PolynomialPage())),
     ];
 
     return Scaffold(
