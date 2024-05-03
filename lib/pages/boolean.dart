@@ -11,29 +11,25 @@ class BooleanPage extends StatefulWidget {
 
 class _BooleanPageState extends State<BooleanPage> {
   // inputs
-  String yinit = '';
-  String h = '';
-  String tinit = '';
-  String tfinal = '';
+  String n = '';
 
   // outputs
-  List<double> y = [];
-  List<double> t = [];
+  List<List<int>> v = [];
 
-  List<List<double>> euler(
-      double tinit, double tfinal, double yinit, double h) {
-    List<double> y = [];
-    List<double> t = [];
-    f(double t, double y) => 4 * exp(0.8 * t) - 0.5 * y;
-    int N = (tfinal - tinit) ~/ h;
-    y.add(yinit);
-    t.add(tinit);
-    for (int i = 1; i < N + 1; i++) {
-      t.add(((t[i - 1] + h) * 10).round() / 10);
-      y.add(y[i - 1] + h * f(t[i - 1], y[i - 1]));
-    }
-    return [y, t];
+  List<List<int>> generateRandomMatrix(int n) {
+  Random random = Random();
+  List<List<int>> matrix=[];
+  for (int i=0;i<n;i++)
+  {
+      matrix.add([]);
   }
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      matrix[i].add(random.nextInt(100));
+    }
+  }
+  return matrix;}
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +38,7 @@ class _BooleanPageState extends State<BooleanPage> {
           false, // Set to false to prevent squashing the app when keyboard is open
       appBar: AppBar(
         title: const Text(
-          'D I F F E R E N T I A L   E Q \' S',
+          'B O O L E A N',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -59,7 +55,7 @@ class _BooleanPageState extends State<BooleanPage> {
                 margin: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                 //decoration: BoxDecoration(border: Border.all(width: 1, color: Colors.grey)),
                 child: const Image(
-                  image: AssetImage('images/Euler_Code.png'),
+                  image: AssetImage('images/Boolean_Code.png'),
                 ),
               ),
             ),
@@ -94,42 +90,14 @@ class _BooleanPageState extends State<BooleanPage> {
                               flex: 3,
                               child: TextField(
                                 onChanged: (value) {
-                                  yinit = value;
+                                  n = value;
                                 },
                                 style: const TextStyle(fontSize: 20),
                                 cursorColor: Colors.teal[200],
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   fillColor: Colors.teal[200],
-                                  hintText: 'yinit',
-                                  hintStyle:
-                                      const TextStyle(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.teal[200]!,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            Expanded(
-                              flex: 3,
-                              child: TextField(
-                                onChanged: (value) {
-                                  h = value;
-                                },
-                                style: const TextStyle(fontSize: 20),
-                                cursorColor: Colors.teal[200],
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.teal[200],
-                                  hintText: 'h',
+                                  hintText: '# between 0-8',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
@@ -149,68 +117,6 @@ class _BooleanPageState extends State<BooleanPage> {
                           ],
                         ),
                         const SizedBox(height: 10.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Spacer(),
-                            Expanded(
-                              flex: 3,
-                              child: TextFormField(
-                                onChanged: (value) {
-                                  tinit = value;
-                                },
-                                style: const TextStyle(fontSize: 20),
-                                cursorColor: Colors.teal[200],
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.teal[200],
-                                  hintText: 'tinit',
-                                  hintStyle:
-                                      const TextStyle(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.teal[200]!,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            Expanded(
-                              flex: 3,
-                              child: TextField(
-                                onChanged: (value) {
-                                  tfinal = value;
-                                },
-                                style: const TextStyle(fontSize: 20),
-                                cursorColor: Colors.teal[200],
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.teal[200],
-                                  hintText: 'tfinal',
-                                  hintStyle:
-                                      const TextStyle(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.teal[200]!,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                          ],
-                        ),
                       ],
                     ),
                     ElevatedButton(
@@ -219,35 +125,23 @@ class _BooleanPageState extends State<BooleanPage> {
                           // if not, then show pop up message
 
                           // remove trailing whitespaces from inputs
-                          tinit = tinit.trim();
-                          tfinal = tfinal.trim();
-                          yinit = yinit.trim();
-                          h = h.trim();
+                          n = n.trim();
 
-                          bool inputsNotEmpty = tinit.isNotEmpty &&
-                              tfinal.isNotEmpty &&
-                              yinit.isNotEmpty &&
-                              h.isNotEmpty;
+
+                          bool inputsNotEmpty = n.isNotEmpty;
                           bool inputsCorrectTypes =
-                              double.tryParse(tinit) != null &&
-                                  double.tryParse(tfinal) != null &&
-                                  double.tryParse(yinit) != null &&
-                                  double.tryParse(h) != null;
+                              int.tryParse(n) != null;
+                              bool range = int.tryParse(n)! <= 8 && int.tryParse(n)! >= 0;
 
-                          if (inputsNotEmpty && inputsCorrectTypes) {
+                          if (inputsNotEmpty && inputsCorrectTypes && range) {
                             // all inputs valid, so calculate
 
-                            double tinitValue = double.parse(tinit);
-                            double tfinalValue = double.parse(tfinal);
-                            double yinitValue = double.parse(yinit);
-                            double hValue = double.parse(h);
+                            int nDouble = int.parse(n);
 
-                            List<List<double>> result = euler(
-                                tinitValue, tfinalValue, yinitValue, hValue);
+                             List<List<int>> answer = generateRandomMatrix(nDouble);
 
                             setState(() {
-                              y = result[0];
-                              t = result[1];
+                              v = answer;
                             });
                           } else {
                             // inputs invalid, so show pop up message
@@ -261,7 +155,7 @@ class _BooleanPageState extends State<BooleanPage> {
                                     style: TextStyle(fontSize: 24),
                                   ),
                                   content: const Text(
-                                    "Please make sure that all inputs are provided and they are all numeric.",
+                                    "Please make sure that all inputs are provided and they are all numeric. Make sure the number is also between 0 and 8.",
                                     style: TextStyle(fontSize: 20),
                                   ),
                                   actions: [
@@ -281,13 +175,12 @@ class _BooleanPageState extends State<BooleanPage> {
                             );
 
                             setState(() {
-                              y = [];
-                              t = [];
+                              v = [];
                             });
                           }
 
                           debugPrint(
-                              'h = $h, tinit = $tinit, tfinal = $tfinal, yinit = $yinit, y=$y, t=$t');
+                              'v=$v');
                         },
                         child: const Text('Calculate')),
                   ],
@@ -321,22 +214,13 @@ class _BooleanPageState extends State<BooleanPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            't = ${t.map((double value) => value.toStringAsFixed(1)).join(', ')}',
+                            'Vector = $v',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                             ),
-                            maxLines: 2,
-                          ),
-                          AutoSizeText(
-                            'y = ${y.map((double value) => value.toStringAsFixed(2)).join(', ')}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 3,
+                            maxLines: 4,
                           ),
                         ],
                       ),
