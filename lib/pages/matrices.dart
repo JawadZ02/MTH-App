@@ -19,7 +19,7 @@ class _MatricesPageState extends State<MatricesPage> {
   double output = 0;
 
   //flags
-  int error = 0;
+  int error = 1;
 
   double determinant(
       double topleft, double topright, double bottomleft, double bottomright) {
@@ -305,7 +305,7 @@ class _MatricesPageState extends State<MatricesPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            error == 0 ? 'determinant = $output' : 'output =',
+                            error == 0 ? 'determinant = $output' : 'No output',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,

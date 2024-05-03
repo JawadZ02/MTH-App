@@ -27,10 +27,10 @@ class _PolynomialPageState extends State<PolynomialPage> {
   String root2ImgString ='';
 
   //flags
-  int error = 0;
+  int error = 1;
   int length = 0;
   
-  // Do not forget the import: import 'dart:math';
+  //You need to import as follows: import 'dart:math';
   List<double> calculateRoots(double a, double b, double c) {
     List<double> roots = [];
     double discriminant = b * b - 4 * a * c;
@@ -41,15 +41,13 @@ class _PolynomialPageState extends State<PolynomialPage> {
     } else if (discriminant == 0) {
       double root = -b / (2 * a);
       roots = [root, root];
-    } else {
-      // Imaginary roots
+    } else {// Imaginary roots
       double realPart = -b / (2 * a);
       double imaginaryPart = sqrt(-discriminant) / (2 * a);
       roots = [realPart, imaginaryPart, realPart, -imaginaryPart];
     }
     return roots;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -312,14 +310,10 @@ class _PolynomialPageState extends State<PolynomialPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            length == 2
-                                ? error == 0
-                                    ? 'root1 = $root1String'
-                                    : 'No roots'
-                                : length == 4
-                                    ? 'root1 = [$root1String, $root1ImgString i]'
-                                    : 'No roots',
+                            error == 0?
                             
+                            length == 2? 'root1 = $root1String' : 'root1 = [$root1String, $root1ImgString i]' : 'No output',
+
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,
@@ -328,13 +322,11 @@ class _PolynomialPageState extends State<PolynomialPage> {
                             maxLines: 2,
                           ),
                           AutoSizeText(
-                            length == 2
-                                ? error == 0
-                                    ? 'root2 = $root2String'
-                                    : 'No roots'
-                                : length == 4
-                                    ? 'root2 = [$root2String, $root2ImgString i]'
-                                    : 'No roots',
+                            error == 0?
+                                 length == 2?
+                                     'root2 = $root2String'
+                                    : 'root2 = [$root2String, $root2ImgString i]' 
+                                    : '',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,

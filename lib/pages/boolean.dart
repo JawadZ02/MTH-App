@@ -161,10 +161,14 @@ class _BooleanPageState extends State<BooleanPage> {
 
 
                           bool inputsNotEmpty = x.isNotEmpty && y.isNotEmpty;
-                          bool inputsCorrectTypes =
-                              int.tryParse(x) != null && int.tryParse(y) != null;
-                              bool range = (int.tryParse(x)! ==0 || int.tryParse(x)! == 1) && (int.tryParse(y)! ==0 || int.tryParse(y)! == 1);
-
+                          bool inputsCorrectTypes = (int.tryParse(x) != null) && (int.tryParse(y) != null);
+                          bool range = true;
+                          double? xParsed = double.tryParse(x);
+                          double? yParsed = double.tryParse(y);
+                          if(inputsCorrectTypes){
+                            range = (xParsed == 0 || xParsed == 1) && (yParsed ==0 || yParsed == 1);
+                          }
+                          
                           if (inputsNotEmpty && inputsCorrectTypes && range) {
                             // all inputs valid, so calculate
                             error = 0;
@@ -256,7 +260,7 @@ class _BooleanPageState extends State<BooleanPage> {
                           AutoSizeText(
                             error == 0
                                 ? 'AND = $and\nOR = $or\nXOR = $xor\nXNOR = $xnor'
-                                :'',
+                                :'No output',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,

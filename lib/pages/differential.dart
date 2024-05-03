@@ -20,6 +20,10 @@ class _DifferentialPageState extends State<DifferentialPage> {
   List<double> y = [];
   List<double> t = [];
 
+  //flags
+  int error = 1;
+
+  //You need to import as follows: import 'dart:math';
   List<List<double>> euler(
       double tinit, double tfinal, double yinit, double h) {
     List<double> y = [];
@@ -42,7 +46,7 @@ class _DifferentialPageState extends State<DifferentialPage> {
           false, // Set to false to prevent squashing the app when keyboard is open
       appBar: AppBar(
         title: const Text(
-          'D I F F E R E N T I A L   E Q \' S',
+          'D I F F  E Q \' S',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -233,8 +237,18 @@ class _DifferentialPageState extends State<DifferentialPage> {
                                   double.tryParse(tfinal) != null &&
                                   double.tryParse(yinit) != null &&
                                   double.tryParse(h) != null;
+                          bool range = true;
+                          double? tinitParsed = double.tryParse(tinit);
+                          // double? tfinalParsed = double.tryParse(tfinal);
+                          double? hParsed = double.tryParse(h);
 
-                          if (inputsNotEmpty && inputsCorrectTypes) {
+                          if(inputsCorrectTypes){
+                            range = (tinitParsed! <= double.parse(tfinal)) && (hParsed! >= 0 );
+                          }
+
+                          if (inputsNotEmpty && inputsCorrectTypes && range) {
+
+                            error = 0;
                             // all inputs valid, so calculate
 
                             double tinitValue = double.parse(tinit);
@@ -251,6 +265,7 @@ class _DifferentialPageState extends State<DifferentialPage> {
                             });
                           } else {
                             // inputs invalid, so show pop up message
+                            error = 1;
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -261,7 +276,7 @@ class _DifferentialPageState extends State<DifferentialPage> {
                                     style: TextStyle(fontSize: 24),
                                   ),
                                   content: const Text(
-                                    "Please make sure that all inputs are provided and they are all numeric.",
+                                    "Please make sure that all inputs are provided and they are all numeric. Make sure the values you entered are all in the correct range.",
                                     style: TextStyle(fontSize: 20),
                                   ),
                                   actions: [
@@ -321,22 +336,24 @@ class _DifferentialPageState extends State<DifferentialPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            't = ${t.map((double value) => value.toStringAsFixed(1)).join(', ')}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 2,
-                          ),
-                          AutoSizeText(
-                            'y = ${y.map((double value) => value.toStringAsFixed(2)).join(', ')}',
+                            error ==0 ?
+                            't = ${t.map((double value) => value.toStringAsFixed(1)).join(', ')}':'No output',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                             ),
                             maxLines: 3,
+                          ),
+                          AutoSizeText(
+                            error ==0 ?
+                            'y = ${y.map((double value) => value.toStringAsFixed(2)).join(', ')}': '',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 5,
                           ),
                         ],
                       ),

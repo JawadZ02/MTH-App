@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class LinearsystemsPage extends StatefulWidget {
@@ -26,7 +25,7 @@ class _LinearsystemsPageState extends State<LinearsystemsPage> {
   String yString = '';
 
   //flags
-  int error = 0;
+  int error = 1;
 
   List<double> simeq(
       double a1, double b1, double c1, double a2, double b2, double c2) {
@@ -392,7 +391,7 @@ class _LinearsystemsPageState extends State<LinearsystemsPage> {
                           AutoSizeText(
                             error == 0
                                 ? 'x = $xString'
-                                :'x =',
+                                :'No output',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,
@@ -403,7 +402,7 @@ class _LinearsystemsPageState extends State<LinearsystemsPage> {
                           AutoSizeText(
                             error == 0
                                 ? 'y = $yString'
-                                :'y =',
+                                :'',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,

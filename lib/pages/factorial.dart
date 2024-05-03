@@ -23,6 +23,10 @@ class _FactorialPageState extends State<FactorialPage> {
 
   // outputs
   int output = 0;
+  String outputString = '';
+
+  //flags
+  int error = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -120,14 +124,24 @@ class _FactorialPageState extends State<FactorialPage> {
                           bool inputsNotEmpty = input.isNotEmpty;
                           bool inputsCorrectTypes =
                               int.tryParse(input) != null;
+                          
+                          bool range = true;
+                          double? inputParsed = double.tryParse(input);
+                          if(inputsCorrectTypes){
+                            range = inputParsed! >= 0 && inputParsed <= 18;
+                          }
 
-                          if (inputsNotEmpty && inputsCorrectTypes) {
+                          
+
+                          if (inputsNotEmpty && inputsCorrectTypes && range) {
                             // all inputs valid, so calculate
+                            error = 0;
                           setState(() {
                               output = factorial(int.parse(input));
                             });
                           } else {
                             // inputs invalid, so show pop up message
+                            error = 1;
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -138,7 +152,7 @@ class _FactorialPageState extends State<FactorialPage> {
                                     style: TextStyle(fontSize: 24),
                                   ),
                                   content: const Text(
-                                    "Please make sure that all inputs are provided and they are all numeric.",
+                                    "Please make sure that all inputs are provided and they are all numeric. Make sure you enter a number greater than or equal to 0 and less than or equal to 18.",
                                     style: TextStyle(fontSize: 20),
                                   ),
                                   actions: [
@@ -205,22 +219,13 @@ class _FactorialPageState extends State<FactorialPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            'input = $input',
+                            error == 0 ? 'output = $output' : 'No output',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                              fontSize: 30,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
-                            maxLines: 2,
-                          ),
-                          AutoSizeText(
-                            output != 0 ? 'output = $output' : 'output =',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 3,
+                            maxLines: 10,
                           ),
                         ],
                       ),

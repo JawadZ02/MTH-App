@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class ArithmeticPage extends StatefulWidget {
@@ -21,8 +20,14 @@ class _ArithmeticPageState extends State<ArithmeticPage> {
   double divide = 0;
   double power = 0;
 
+  String addString = '';
+  String subtractString = '';
+  String multiplyString = '';
+  String divideString = '';
+  String powerString = '';
+
   //flags
-  int error = 0;
+  int error = 1;
 
 List<double> arithmetic(double x, double y) {
     double add, subtract, multiply, divide, power;
@@ -32,14 +37,10 @@ List<double> arithmetic(double x, double y) {
     divide = x / y;
     if (y == 0) power = 1; // if power is 0 we return 1 and leave
     bool flip = false;
-    if (y < 0) {
-      y = -y; // if the power is negative we make it positive, calculate normally, then flip it in the end
-      flip = true;
-    }
+    if (y < 0) {y = -y; 
+      flip = true;} // if power is negative we make it positive, calculate normally, then flip
     double ans = x;
-    for (int i = 2; i <= y; i++) {
-      ans = ans * x;
-    }
+    for (int i = 2; i <= y; i++) {ans = ans * x;}
     if (flip) power = 1 / ans; // if power was negative we return flipped answer
     power = ans; // if it wasn't negative we return normal answer
     return [add, subtract, multiply, divide, power];
@@ -191,6 +192,13 @@ List<double> arithmetic(double x, double y) {
                                multiply= answer[2];
                                divide= answer[3];
                                power= answer[4];
+
+                               addString = add.toStringAsFixed(2);
+                               subtractString = subtract.toStringAsFixed(2);
+                               multiplyString = multiply.toStringAsFixed(2);
+                               divideString = divide.toStringAsFixed(2);
+                               powerString = power.toStringAsFixed(2);
+
                             });
                           } else {
                             error = 1;
@@ -269,8 +277,8 @@ List<double> arithmetic(double x, double y) {
                         children: [
                           AutoSizeText(
                             error == 0
-                                ? 'sum = $add\n subtraction = $subtract\n multiplication = $multiply\n division = $divide\n power = $power\n'
-                                : 'sum =\n subtraction =\n multiplication =\n division =\n power =\n',
+                                ? 'X + Y = $addString\nX - Y = $subtractString\nX * Y = $multiplyString\nX / Y = $divideString\nX ^ Y = $powerString'
+                                : 'No output',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 20,

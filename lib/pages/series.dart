@@ -25,6 +25,9 @@ class _SeriesPageState extends State<SeriesPage> {
   // outputs
   double output = 0;
 
+  //flags
+  int error = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,13 +125,20 @@ class _SeriesPageState extends State<SeriesPage> {
                           bool inputsCorrectTypes =
                               int.tryParse(input) != null;
 
-                          if (inputsNotEmpty && inputsCorrectTypes) {
+                          bool range = true;
+                          if(inputsCorrectTypes){
+                            range = double.tryParse(input)! > 0;
+                          }
+
+                          if (inputsNotEmpty && inputsCorrectTypes && range) {
                             // all inputs valid, so calculate
+                            error = 0;
                           setState(() {
                               output = series(int.parse(input));
                             });
                           } else {
                             // inputs invalid, so show pop up message
+                            error = 1;
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -139,7 +149,7 @@ class _SeriesPageState extends State<SeriesPage> {
                                     style: TextStyle(fontSize: 24),
                                   ),
                                   content: const Text(
-                                    "Please make sure that all inputs are provided and they are all numeric.",
+                                    "Please make sure that the input is provided and that it is numeric. Make sure you enter a number greater than 0.",
                                     style: TextStyle(fontSize: 20),
                                   ),
                                   actions: [
@@ -206,16 +216,7 @@ class _SeriesPageState extends State<SeriesPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            'input = $input',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 2,
-                          ),
-                          AutoSizeText(
-                            output != 0 ? 'output = $output' : 'output =',
+                            error == 0 ? 'output = $output' : 'No output',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,

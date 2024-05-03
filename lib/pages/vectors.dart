@@ -16,6 +16,10 @@ class _VectorsPageState extends State<VectorsPage> {
   // outputs
   List<List<int>> v = [];
 
+  //flags
+  int error = 1;
+
+  //You need to import as follows: import 'dart:math';
   List<List<int>> generateRandomMatrix(int n) {
   Random random = Random();
   List<List<int>> matrix=[];
@@ -131,11 +135,17 @@ class _VectorsPageState extends State<VectorsPage> {
                           bool inputsNotEmpty = n.isNotEmpty;
                           bool inputsCorrectTypes =
                               int.tryParse(n) != null;
-                              bool range = int.tryParse(n)! <= 8 && int.tryParse(n)! >= 0;
+                          
+
+                          bool range = true;
+                          int? xParsed = int.tryParse(n);
+                          if(inputsCorrectTypes){
+                            range = (xParsed! <= 8 && xParsed >= 0);
+                          }
 
                           if (inputsNotEmpty && inputsCorrectTypes && range) {
                             // all inputs valid, so calculate
-
+                            error = 0;
                             int nDouble = int.parse(n);
 
                              List<List<int>> answer = generateRandomMatrix(nDouble);
@@ -145,6 +155,7 @@ class _VectorsPageState extends State<VectorsPage> {
                             });
                           } else {
                             // inputs invalid, so show pop up message
+                            error = 1;
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -214,7 +225,7 @@ class _VectorsPageState extends State<VectorsPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            'Vector = $v',
+                            error == 0 ? 'Vector = $v' : 'No output',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,
