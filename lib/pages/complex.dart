@@ -394,7 +394,7 @@ List<double> complex(double r1, double i1, double r2, double i2) {
                         children: [
                           AutoSizeText(
                             error == 0
-                                ? '+ = [$realPartAddString, $imagPartAddString i]\n- = [$realPartSubString, $imagPartSubString i]\n* = [$realPartMultiString, $imagPartMultiString i]\n/ = [$realPartDivString, $imagPartDivString i]\nConjugate1 = [$realPartConjString1, $imagPartConjString1 i]\nConjugate2 = [$realPartConjString2, $imagPartConjString2 i]'
+                                ? 'Z1 + Z2 = [$realPartAddString, $imagPartAddString i]\nZ1 - Z2 = [$realPartSubString, $imagPartSubString i]\nZ1 * Z2 = [$realPartMultiString, $imagPartMultiString i]\nZ1 / Z2 = [$realPartDivString, $imagPartDivString i]\nConjugate1 = [$realPartConjString1, $imagPartConjString1 i]\nConjugate2 = [$realPartConjString2, $imagPartConjString2 i]'
                                 : 'No output',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
