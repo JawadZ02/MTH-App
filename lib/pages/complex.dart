@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class ComplexPage extends StatefulWidget {
@@ -11,29 +10,66 @@ class ComplexPage extends StatefulWidget {
 
 class _ComplexPageState extends State<ComplexPage> {
   // inputs
-  String yinit = '';
-  String h = '';
-  String tinit = '';
-  String tfinal = '';
+  String r1 = '';
+  String i1 = '';
+  String r2 = '';
+  String i2 = '';
+
+  double r1Double = 0;
+  double i1Double = 0;
+  double r2Double = 0;
+  double i2Double = 0;
 
   // outputs
   List<double> y = [];
-  List<double> t = [];
+  double realPartAdd = 0;
+  double imagPartAdd = 0;
+  double realPartSub = 0;
+  double imagPartSub = 0;
+  double realPartMulti = 0;
+  double imagPartMulti = 0;
+  double realPartDiv = 0;
+  double imagPartDiv = 0;
+  double realPartConj1 = 0;
+  double imagPartConj1 = 0;
+  double realPartConj2 = 0;
+  double imagPartConj2 = 0;
 
-  List<List<double>> euler(
-      double tinit, double tfinal, double yinit, double h) {
-    List<double> y = [];
-    List<double> t = [];
-    f(double t, double y) => 4 * exp(0.8 * t) - 0.5 * y;
-    int N = (tfinal - tinit) ~/ h;
-    y.add(yinit);
-    t.add(tinit);
-    for (int i = 1; i < N + 1; i++) {
-      t.add(((t[i - 1] + h) * 10).round() / 10);
-      y.add(y[i - 1] + h * f(t[i - 1], y[i - 1]));
-    }
-    return [y, t];
+  String realPartAddString = '';
+  String imagPartAddString = '';
+  String realPartSubString = '';
+  String imagPartSubString = '';
+  String realPartMultiString = '';
+  String imagPartMultiString = '';
+  String realPartDivString = '';
+  String imagPartDivString = '';
+  String realPartConjString1 = '';
+  String imagPartConjString1 = '';
+  String realPartConjString2 = '';
+  String imagPartConjString2 = '';
+
+  //flags
+  int error = 1;
+
+List<double> complex(double r1, double i1, double r2, double i2) {
+    double realPartAdd = r1 + r2;
+    double imagPartAdd = i1 + i2;
+    double realPartSub = r1 - r2;
+    double imagPartSub = i1 - i2;
+    double realPartMulti = r1 * r2 - i1 * i2;
+    double imagPartMulti = r1 * i2 + i1 * r2;
+    double a = r1, b = i1, c = r2, d = i2;
+    double realPartDiv = (a * c + b * d) / (c * c + d * d);
+    double imagPartDiv = (b * c - a * d) / (c * c + d * d);
+    double realPartConj1 = r1;
+    double imagPartConj1 = -i1;
+    double realPartConj2 = r2;
+    double imagPartConj2 = -i2;
+    return [
+      realPartAdd,imagPartAdd,realPartSub,imagPartSub,realPartMulti,imagPartMulti,
+      realPartDiv,imagPartDiv,realPartConj1,imagPartConj1, realPartConj2, imagPartConj2];
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +78,7 @@ class _ComplexPageState extends State<ComplexPage> {
           false, // Set to false to prevent squashing the app when keyboard is open
       appBar: AppBar(
         title: const Text(
-          'D I F F E R E N T I A L   E Q \' S',
+          'C O M P L E X',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -59,7 +95,7 @@ class _ComplexPageState extends State<ComplexPage> {
                 margin: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                 //decoration: BoxDecoration(border: Border.all(width: 1, color: Colors.grey)),
                 child: const Image(
-                  image: AssetImage('images/Euler_Code.png'),
+                  image: AssetImage('images/Complex_Code.png'),
                 ),
               ),
             ),
@@ -94,14 +130,14 @@ class _ComplexPageState extends State<ComplexPage> {
                               flex: 3,
                               child: TextField(
                                 onChanged: (value) {
-                                  yinit = value;
+                                  r1 = value;
                                 },
                                 style: const TextStyle(fontSize: 20),
                                 cursorColor: Colors.teal[200],
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   fillColor: Colors.teal[200],
-                                  hintText: 'yinit',
+                                  hintText: 'r1',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
@@ -122,14 +158,14 @@ class _ComplexPageState extends State<ComplexPage> {
                               flex: 3,
                               child: TextField(
                                 onChanged: (value) {
-                                  h = value;
+                                  i1 = value;
                                 },
                                 style: const TextStyle(fontSize: 20),
                                 cursorColor: Colors.teal[200],
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   fillColor: Colors.teal[200],
-                                  hintText: 'h',
+                                  hintText: 'i1',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
@@ -157,14 +193,14 @@ class _ComplexPageState extends State<ComplexPage> {
                               flex: 3,
                               child: TextFormField(
                                 onChanged: (value) {
-                                  tinit = value;
+                                  r2 = value;
                                 },
                                 style: const TextStyle(fontSize: 20),
                                 cursorColor: Colors.teal[200],
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   fillColor: Colors.teal[200],
-                                  hintText: 'tinit',
+                                  hintText: 'r2',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
@@ -185,14 +221,14 @@ class _ComplexPageState extends State<ComplexPage> {
                               flex: 3,
                               child: TextField(
                                 onChanged: (value) {
-                                  tfinal = value;
+                                  i2 = value;
                                 },
                                 style: const TextStyle(fontSize: 20),
                                 cursorColor: Colors.teal[200],
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   fillColor: Colors.teal[200],
-                                  hintText: 'tfinal',
+                                  hintText: 'i2',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
@@ -219,38 +255,64 @@ class _ComplexPageState extends State<ComplexPage> {
                           // if not, then show pop up message
 
                           // remove trailing whitespaces from inputs
-                          tinit = tinit.trim();
-                          tfinal = tfinal.trim();
-                          yinit = yinit.trim();
-                          h = h.trim();
+                          r1 = r1.trim();
+                          i1 = i1.trim();
+                          r2 = r2.trim();
+                          i2 = i2.trim();
 
-                          bool inputsNotEmpty = tinit.isNotEmpty &&
-                              tfinal.isNotEmpty &&
-                              yinit.isNotEmpty &&
-                              h.isNotEmpty;
+                          bool inputsNotEmpty = r1.isNotEmpty &&
+                              i1.isNotEmpty &&
+                              r2.isNotEmpty &&
+                              i2.isNotEmpty;
                           bool inputsCorrectTypes =
-                              double.tryParse(tinit) != null &&
-                                  double.tryParse(tfinal) != null &&
-                                  double.tryParse(yinit) != null &&
-                                  double.tryParse(h) != null;
+                              double.tryParse(r1) != null &&
+                                  double.tryParse(i1) != null &&
+                                  double.tryParse(r2) != null &&
+                                  double.tryParse(i2) != null;
 
                           if (inputsNotEmpty && inputsCorrectTypes) {
                             // all inputs valid, so calculate
 
-                            double tinitValue = double.parse(tinit);
-                            double tfinalValue = double.parse(tfinal);
-                            double yinitValue = double.parse(yinit);
-                            double hValue = double.parse(h);
+                            error = 0;
 
-                            List<List<double>> result = euler(
-                                tinitValue, tfinalValue, yinitValue, hValue);
+                            double r1Double = double.parse(r1);
+                            double i1Double = double.parse(i1);
+                            double r2Double = double.parse(r2);
+                            double i2Double = double.parse(i2);
+
+                            List<double> result = complex( r1Double,  i1Double,  r2Double,  i2Double);
 
                             setState(() {
-                              y = result[0];
-                              t = result[1];
+                              realPartAdd = result[0];
+                              imagPartAdd = result[1];
+                              realPartSub = result[2];
+                              imagPartSub = result[3];
+                              realPartMulti = result[4];
+                              imagPartMulti = result[5];
+                              realPartDiv = result[6];
+                              imagPartDiv = result[7];
+                              realPartConj1 = result[8];
+                              imagPartConj1 = result[9];
+                              realPartConj2 = result[10];
+                              imagPartConj2 = result[11];
+
+                              realPartAddString = realPartAdd.toStringAsFixed(2);
+                              imagPartAddString = imagPartAdd.toStringAsFixed(2);
+                              realPartSubString = realPartSub.toStringAsFixed(2);
+                              imagPartSubString = imagPartSub.toStringAsFixed(2);
+                              realPartMultiString = realPartMulti.toStringAsFixed(2);
+                              imagPartMultiString = imagPartMulti.toStringAsFixed(2);
+                              realPartDivString = realPartDiv.toStringAsFixed(2);
+                              imagPartDivString = imagPartDiv.toStringAsFixed(2);
+                              realPartConjString1 = realPartConj1.toStringAsFixed(2);
+                              imagPartConjString1 = imagPartConj1.toStringAsFixed(2);
+                              realPartConjString2 = realPartConj2.toStringAsFixed(2);
+                              imagPartConjString2 = imagPartConj2.toStringAsFixed(2);
                             });
                           } else {
                             // inputs invalid, so show pop up message
+                            error = 1;
+
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -281,13 +343,23 @@ class _ComplexPageState extends State<ComplexPage> {
                             );
 
                             setState(() {
-                              y = [];
-                              t = [];
+                              realPartAdd = 0;
+                              imagPartAdd = 0;
+                              realPartSub = 0;
+                              imagPartSub = 0;
+                              realPartMulti = 0;
+                              imagPartMulti = 0;
+                              realPartDiv = 0;
+                              imagPartDiv = 0;
+                              realPartConj1 = 0;
+                              imagPartConj1 = 0;
+                              realPartConj2 = 0;
+                              imagPartConj2 = 0;
                             });
                           }
 
                           debugPrint(
-                              'h = $h, tinit = $tinit, tfinal = $tfinal, yinit = $yinit, y=$y, t=$t');
+                              'realPartAdd = $realPartAdd');
                         },
                         child: const Text('Calculate')),
                   ],
@@ -321,22 +393,15 @@ class _ComplexPageState extends State<ComplexPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            't = ${t.map((double value) => value.toStringAsFixed(1)).join(', ')}',
+                            error == 0
+                                ? '+ = [$realPartAddString, $imagPartAddString i]\n- = [$realPartSubString, $imagPartSubString i]\n* = [$realPartMultiString, $imagPartMultiString i]\n/ = [$realPartDivString, $imagPartDivString i]\nConjugate1 = [$realPartConjString1, $imagPartConjString1 i]\nConjugate2 = [$realPartConjString2, $imagPartConjString2 i]'
+                                : 'No output',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                              fontSize: 30,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
-                            maxLines: 2,
-                          ),
-                          AutoSizeText(
-                            'y = ${y.map((double value) => value.toStringAsFixed(2)).join(', ')}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 3,
+                            maxLines: 6,
                           ),
                         ],
                       ),

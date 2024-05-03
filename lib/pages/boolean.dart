@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class BooleanPage extends StatefulWidget {
@@ -11,25 +10,29 @@ class BooleanPage extends StatefulWidget {
 
 class _BooleanPageState extends State<BooleanPage> {
   // inputs
-  String n = '';
+  String x = '';
+  String y = '';
 
   // outputs
-  List<List<int>> v = [];
+  int and = 0;
+  int or = 0;
+  int xor = 0;
+  int xnor = 0;
 
-  List<List<int>> generateRandomMatrix(int n) {
-  Random random = Random();
-  List<List<int>> matrix=[];
-  for (int i=0;i<n;i++)
-  {
-      matrix.add([]);
-  }
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < n; j++) {
-      matrix[i].add(random.nextInt(100));
-    }
-  }
-  return matrix;}
+  //flags
+  int error = 1;
 
+  List<int> boolean(int x, int y) {
+    int and = 0;
+    int or = 1;
+    int xor = 1;
+    int xnor = 1;
+    if (x == 1 && y == 1) and = 1;
+    if (x == 0 && y == 0) or = 0;
+    if (x == y) xor =0;
+    if (x != y) xnor = 0;
+    return [and, or, xor, xnor];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,14 +93,42 @@ class _BooleanPageState extends State<BooleanPage> {
                               flex: 3,
                               child: TextField(
                                 onChanged: (value) {
-                                  n = value;
+                                  x = value;
                                 },
                                 style: const TextStyle(fontSize: 20),
                                 cursorColor: Colors.teal[200],
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   fillColor: Colors.teal[200],
-                                  hintText: '# between 0-8',
+                                  hintText: '0/1',
+                                  hintStyle:
+                                      const TextStyle(color: Colors.grey),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(
+                                      color: Colors.teal[200]!,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            Expanded(
+                              flex: 3,
+                              child: TextField(
+                                onChanged: (value) {
+                                  y = value;
+                                },
+                                style: const TextStyle(fontSize: 20),
+                                cursorColor: Colors.teal[200],
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  fillColor: Colors.teal[200],
+                                  hintText: '0/1',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
@@ -125,26 +156,32 @@ class _BooleanPageState extends State<BooleanPage> {
                           // if not, then show pop up message
 
                           // remove trailing whitespaces from inputs
-                          n = n.trim();
+                          x = x.trim();
+                          y = y.trim();
 
 
-                          bool inputsNotEmpty = n.isNotEmpty;
+                          bool inputsNotEmpty = x.isNotEmpty && y.isNotEmpty;
                           bool inputsCorrectTypes =
-                              int.tryParse(n) != null;
-                              bool range = int.tryParse(n)! <= 8 && int.tryParse(n)! >= 0;
+                              int.tryParse(x) != null && int.tryParse(y) != null;
+                              bool range = (int.tryParse(x)! ==0 || int.tryParse(x)! == 1) && (int.tryParse(y)! ==0 || int.tryParse(y)! == 1);
 
                           if (inputsNotEmpty && inputsCorrectTypes && range) {
                             // all inputs valid, so calculate
+                            error = 0;
+                            int xDouble = int.parse(x);
+                            int yDouble = int.parse(y);
 
-                            int nDouble = int.parse(n);
-
-                             List<List<int>> answer = generateRandomMatrix(nDouble);
+                             List<int> answer = boolean( xDouble,  yDouble);
 
                             setState(() {
-                              v = answer;
+                              and = answer[0];
+                              or = answer[1];
+                              xor = answer[2];
+                              xnor = answer[3];
                             });
                           } else {
                             // inputs invalid, so show pop up message
+                            error = 1;
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -155,7 +192,7 @@ class _BooleanPageState extends State<BooleanPage> {
                                     style: TextStyle(fontSize: 24),
                                   ),
                                   content: const Text(
-                                    "Please make sure that all inputs are provided and they are all numeric. Make sure the number is also between 0 and 8.",
+                                    "Please make sure that all inputs are provided and they are all binary.",
                                     style: TextStyle(fontSize: 20),
                                   ),
                                   actions: [
@@ -175,12 +212,15 @@ class _BooleanPageState extends State<BooleanPage> {
                             );
 
                             setState(() {
-                              v = [];
+                              and = 0;
+                              or = 0;
+                              xor = 0;
+                              xnor = 0;
                             });
                           }
 
                           debugPrint(
-                              'v=$v');
+                              'AND=$and');
                         },
                         child: const Text('Calculate')),
                   ],
@@ -214,7 +254,9 @@ class _BooleanPageState extends State<BooleanPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            'Vector = $v',
+                            error == 0
+                                ? 'AND = $and\nOR = $or\nXOR = $xor\nXNOR = $xnor'
+                                :'',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,
