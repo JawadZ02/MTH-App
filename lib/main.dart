@@ -48,7 +48,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final List<String> buttonNames = ['Arithmetic Operations', 'Boolean Algebra', 'Complex Numbers Operations', 'Differential Equations', 'Factorial', 'Linear Systems', 'Matrices', '2nd order Polynomial solver', 'Series', 'Vectors'];
+    final List<String> buttonNames = ['Arithmetic', 'Boolean Algebra', 'Complex Numbers', 'Differential Equations', 'Factorial', 'Linear Systems', 'Matrices', '2nd order Polynomials', 'Series', 'Vectors'];
     final List<Function()?> navigationFunctions = [
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ArithmeticPage())),
       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const BooleanPage())),

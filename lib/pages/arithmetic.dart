@@ -11,28 +11,38 @@ class ArithmeticPage extends StatefulWidget {
 
 class _ArithmeticPageState extends State<ArithmeticPage> {
   // inputs
-  String yinit = '';
-  String h = '';
-  String tinit = '';
-  String tfinal = '';
+  String x = '';
+  String y = '';
 
   // outputs
-  List<double> y = [];
-  List<double> t = [];
+  double add = 0;
+  double subtract = 0;
+  double multiply = 0;
+  double divide = 0;
+  double power = 0;
 
-  List<List<double>> euler(
-      double tinit, double tfinal, double yinit, double h) {
-    List<double> y = [];
-    List<double> t = [];
-    f(double t, double y) => 4 * exp(0.8 * t) - 0.5 * y;
-    int N = (tfinal - tinit) ~/ h;
-    y.add(yinit);
-    t.add(tinit);
-    for (int i = 1; i < N + 1; i++) {
-      t.add(((t[i - 1] + h) * 10).round() / 10);
-      y.add(y[i - 1] + h * f(t[i - 1], y[i - 1]));
+  //flags
+  int error = 0;
+
+List<double> arithmetic(double x, double y) {
+    double add, subtract, multiply, divide, power;
+    add = x + y;
+    subtract = x - y;
+    multiply = x * y;
+    divide = x / y;
+    if (y == 0) power = 1; // if power is 0 we return 1 and leave
+    bool flip = false;
+    if (y < 0) {
+      y = -y; // if the power is negative we make it positive, calculate normally, then flip it in the end
+      flip = true;
     }
-    return [y, t];
+    double ans = x;
+    for (int i = 2; i <= y; i++) {
+      ans = ans * x;
+    }
+    if (flip) power = 1 / ans; // if power was negative we return flipped answer
+    power = ans; // if it wasn't negative we return normal answer
+    return [add, subtract, multiply, divide, power];
   }
 
   @override
@@ -42,7 +52,7 @@ class _ArithmeticPageState extends State<ArithmeticPage> {
           false, // Set to false to prevent squashing the app when keyboard is open
       appBar: AppBar(
         title: const Text(
-          'D I F F E R E N T I A L   E Q \' S',
+          'A R I T H M E T I C',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -59,7 +69,7 @@ class _ArithmeticPageState extends State<ArithmeticPage> {
                 margin: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                 //decoration: BoxDecoration(border: Border.all(width: 1, color: Colors.grey)),
                 child: const Image(
-                  image: AssetImage('images/Euler_Code.png'),
+                  image: AssetImage('images/Arithmetic_Code.png'),
                 ),
               ),
             ),
@@ -94,14 +104,14 @@ class _ArithmeticPageState extends State<ArithmeticPage> {
                               flex: 3,
                               child: TextField(
                                 onChanged: (value) {
-                                  yinit = value;
+                                  x = value;
                                 },
                                 style: const TextStyle(fontSize: 20),
                                 cursorColor: Colors.teal[200],
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   fillColor: Colors.teal[200],
-                                  hintText: 'yinit',
+                                  hintText: 'x',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
@@ -122,14 +132,14 @@ class _ArithmeticPageState extends State<ArithmeticPage> {
                               flex: 3,
                               child: TextField(
                                 onChanged: (value) {
-                                  h = value;
+                                  y = value;
                                 },
                                 style: const TextStyle(fontSize: 20),
                                 cursorColor: Colors.teal[200],
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   fillColor: Colors.teal[200],
-                                  hintText: 'h',
+                                  hintText: 'y',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
@@ -149,107 +159,41 @@ class _ArithmeticPageState extends State<ArithmeticPage> {
                           ],
                         ),
                         const SizedBox(height: 10.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Spacer(),
-                            Expanded(
-                              flex: 3,
-                              child: TextFormField(
-                                onChanged: (value) {
-                                  tinit = value;
-                                },
-                                style: const TextStyle(fontSize: 20),
-                                cursorColor: Colors.teal[200],
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.teal[200],
-                                  hintText: 'tinit',
-                                  hintStyle:
-                                      const TextStyle(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.teal[200]!,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            Expanded(
-                              flex: 3,
-                              child: TextField(
-                                onChanged: (value) {
-                                  tfinal = value;
-                                },
-                                style: const TextStyle(fontSize: 20),
-                                cursorColor: Colors.teal[200],
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.teal[200],
-                                  hintText: 'tfinal',
-                                  hintStyle:
-                                      const TextStyle(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.teal[200]!,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                          ],
-                        ),
                       ],
                     ),
                     ElevatedButton(
                         onPressed: () {
+                          error = 0;
                           // check if all inputs are valid (not empty and correct types)
                           // if not, then show pop up message
 
                           // remove trailing whitespaces from inputs
-                          tinit = tinit.trim();
-                          tfinal = tfinal.trim();
-                          yinit = yinit.trim();
-                          h = h.trim();
+                          x = x.trim();
+                          y = y.trim();
 
-                          bool inputsNotEmpty = tinit.isNotEmpty &&
-                              tfinal.isNotEmpty &&
-                              yinit.isNotEmpty &&
-                              h.isNotEmpty;
+                          bool inputsNotEmpty = x.isNotEmpty &&
+                              y.isNotEmpty;
                           bool inputsCorrectTypes =
-                              double.tryParse(tinit) != null &&
-                                  double.tryParse(tfinal) != null &&
-                                  double.tryParse(yinit) != null &&
-                                  double.tryParse(h) != null;
+                              double.tryParse(x) != null &&
+                                  double.tryParse(y) != null;
 
                           if (inputsNotEmpty && inputsCorrectTypes) {
                             // all inputs valid, so calculate
 
-                            double tinitValue = double.parse(tinit);
-                            double tfinalValue = double.parse(tfinal);
-                            double yinitValue = double.parse(yinit);
-                            double hValue = double.parse(h);
+                            double input1 = double.parse(x);
+                            double input2 = double.parse(y);
 
-                            List<List<double>> result = euler(
-                                tinitValue, tfinalValue, yinitValue, hValue);
+                            List<double> answer = arithmetic(input1, input2);
 
                             setState(() {
-                              y = result[0];
-                              t = result[1];
+                               add = answer[0];
+                               subtract = answer[1];
+                               multiply= answer[2];
+                               divide= answer[3];
+                               power= answer[4];
                             });
                           } else {
+                            error = 1;
                             // inputs invalid, so show pop up message
                             showDialog(
                               context: context,
@@ -281,13 +225,16 @@ class _ArithmeticPageState extends State<ArithmeticPage> {
                             );
 
                             setState(() {
-                              y = [];
-                              t = [];
+                              add = 0;
+                              subtract = 0;
+                              multiply= 0;
+                              divide= 0;
+                              power= 0;
                             });
                           }
 
                           debugPrint(
-                              'h = $h, tinit = $tinit, tfinal = $tfinal, yinit = $yinit, y=$y, t=$t');
+                              'add = $add, subtract = $subtract, multiply = $multiply, divide = $divide, y=$power');
                         },
                         child: const Text('Calculate')),
                   ],
@@ -321,22 +268,15 @@ class _ArithmeticPageState extends State<ArithmeticPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            't = ${t.map((double value) => value.toStringAsFixed(1)).join(', ')}',
+                            error == 0
+                                ? 'sum = $add\n subtraction = $subtract\n multiplication = $multiply\n division = $divide\n power = $power\n'
+                                : 'sum =\n subtraction =\n multiplication =\n division =\n power =\n',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                              fontSize: 30,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
-                            maxLines: 2,
-                          ),
-                          AutoSizeText(
-                            'y = ${y.map((double value) => value.toStringAsFixed(2)).join(', ')}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 3,
+                            maxLines: 5,
                           ),
                         ],
                       ),
