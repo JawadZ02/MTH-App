@@ -11,29 +11,45 @@ class PolynomialPage extends StatefulWidget {
 
 class _PolynomialPageState extends State<PolynomialPage> {
   // inputs
-  String yinit = '';
-  String h = '';
-  String tinit = '';
-  String tfinal = '';
+  String a = '';
+  String b = '';
+  String c = '';
 
   // outputs
-  List<double> y = [];
-  List<double> t = [];
+  double root1 = 0;
+  double root2 = 0;
+  double root1Img = 0;
+  double root2Img = 0;
 
-  List<List<double>> euler(
-      double tinit, double tfinal, double yinit, double h) {
-    List<double> y = [];
-    List<double> t = [];
-    f(double t, double y) => 4 * exp(0.8 * t) - 0.5 * y;
-    int N = (tfinal - tinit) ~/ h;
-    y.add(yinit);
-    t.add(tinit);
-    for (int i = 1; i < N + 1; i++) {
-      t.add(((t[i - 1] + h) * 10).round() / 10);
-      y.add(y[i - 1] + h * f(t[i - 1], y[i - 1]));
+  String root1String ='';
+  String root2String ='';
+  String root1ImgString ='';
+  String root2ImgString ='';
+
+  //flags
+  int error = 0;
+  int length = 0;
+  
+  // Do not forget the import: import 'dart:math';
+  List<double> calculateRoots(double a, double b, double c) {
+    List<double> roots = [];
+    double discriminant = b * b - 4 * a * c;
+    if (discriminant > 0) {
+      double root1 = (-b + sqrt(discriminant)) / (2 * a);
+      double root2 = (-b - sqrt(discriminant)) / (2 * a);
+      roots = [root1, root2];
+    } else if (discriminant == 0) {
+      double root = -b / (2 * a);
+      roots = [root, root];
+    } else {
+      // Imaginary roots
+      double realPart = -b / (2 * a);
+      double imaginaryPart = sqrt(-discriminant) / (2 * a);
+      roots = [realPart, imaginaryPart, realPart, -imaginaryPart];
     }
-    return [y, t];
+    return roots;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +58,7 @@ class _PolynomialPageState extends State<PolynomialPage> {
           false, // Set to false to prevent squashing the app when keyboard is open
       appBar: AppBar(
         title: const Text(
-          'D I F F E R E N T I A L   E Q \' S',
+          'P O L Y N O M I A L',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -59,7 +75,7 @@ class _PolynomialPageState extends State<PolynomialPage> {
                 margin: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                 //decoration: BoxDecoration(border: Border.all(width: 1, color: Colors.grey)),
                 child: const Image(
-                  image: AssetImage('images/Euler_Code.png'),
+                  image: AssetImage('images/Polynomial_Code.png'),
                 ),
               ),
             ),
@@ -94,14 +110,14 @@ class _PolynomialPageState extends State<PolynomialPage> {
                               flex: 3,
                               child: TextField(
                                 onChanged: (value) {
-                                  yinit = value;
+                                  a = value;
                                 },
                                 style: const TextStyle(fontSize: 20),
                                 cursorColor: Colors.teal[200],
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   fillColor: Colors.teal[200],
-                                  hintText: 'yinit',
+                                  hintText: 'a',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
@@ -122,14 +138,42 @@ class _PolynomialPageState extends State<PolynomialPage> {
                               flex: 3,
                               child: TextField(
                                 onChanged: (value) {
-                                  h = value;
+                                  b = value;
                                 },
                                 style: const TextStyle(fontSize: 20),
                                 cursorColor: Colors.teal[200],
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   fillColor: Colors.teal[200],
-                                  hintText: 'h',
+                                  hintText: 'b',
+                                  hintStyle:
+                                      const TextStyle(color: Colors.grey),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(
+                                      color: Colors.teal[200]!,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            Expanded(
+                              flex: 3,
+                              child: TextField(
+                                onChanged: (value) {
+                                  c = value;
+                                },
+                                style: const TextStyle(fontSize: 20),
+                                cursorColor: Colors.teal[200],
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  fillColor: Colors.teal[200],
+                                  hintText: 'c',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
@@ -149,68 +193,6 @@ class _PolynomialPageState extends State<PolynomialPage> {
                           ],
                         ),
                         const SizedBox(height: 10.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Spacer(),
-                            Expanded(
-                              flex: 3,
-                              child: TextFormField(
-                                onChanged: (value) {
-                                  tinit = value;
-                                },
-                                style: const TextStyle(fontSize: 20),
-                                cursorColor: Colors.teal[200],
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.teal[200],
-                                  hintText: 'tinit',
-                                  hintStyle:
-                                      const TextStyle(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.teal[200]!,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            Expanded(
-                              flex: 3,
-                              child: TextField(
-                                onChanged: (value) {
-                                  tfinal = value;
-                                },
-                                style: const TextStyle(fontSize: 20),
-                                cursorColor: Colors.teal[200],
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.teal[200],
-                                  hintText: 'tfinal',
-                                  hintStyle:
-                                      const TextStyle(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.teal[200]!,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                          ],
-                        ),
                       ],
                     ),
                     ElevatedButton(
@@ -219,37 +201,46 @@ class _PolynomialPageState extends State<PolynomialPage> {
                           // if not, then show pop up message
 
                           // remove trailing whitespaces from inputs
-                          tinit = tinit.trim();
-                          tfinal = tfinal.trim();
-                          yinit = yinit.trim();
-                          h = h.trim();
+                          a = a.trim();
+                          b = b.trim();
+                          c = c.trim();
 
-                          bool inputsNotEmpty = tinit.isNotEmpty &&
-                              tfinal.isNotEmpty &&
-                              yinit.isNotEmpty &&
-                              h.isNotEmpty;
+                          bool inputsNotEmpty = a.isNotEmpty &&
+                              b.isNotEmpty &&
+                              c.isNotEmpty;
                           bool inputsCorrectTypes =
-                              double.tryParse(tinit) != null &&
-                                  double.tryParse(tfinal) != null &&
-                                  double.tryParse(yinit) != null &&
-                                  double.tryParse(h) != null;
+                              double.tryParse(a) != null &&
+                                  double.tryParse(b) != null &&
+                                  double.tryParse(c) != null;
 
                           if (inputsNotEmpty && inputsCorrectTypes) {
                             // all inputs valid, so calculate
+                            error = 0;
+                            double aDouble = double.parse(a);
+                            double bDouble = double.parse(b);
+                            double cDouble = double.parse(c);
 
-                            double tinitValue = double.parse(tinit);
-                            double tfinalValue = double.parse(tfinal);
-                            double yinitValue = double.parse(yinit);
-                            double hValue = double.parse(h);
-
-                            List<List<double>> result = euler(
-                                tinitValue, tfinalValue, yinitValue, hValue);
+                            List<double> result = calculateRoots( aDouble,  bDouble,  cDouble);
 
                             setState(() {
-                              y = result[0];
-                              t = result[1];
+                              length = result.length;
+                              if(result.length ==4){
+                              root1 = result[0];
+                              root1String = root1.toStringAsFixed(2);
+                              root1Img = result[1];
+                              root1ImgString = root1Img.toStringAsFixed(2);
+                              root2 = result[2];
+                              root2String = root2.toStringAsFixed(2);
+                              root2Img = result[3];
+                              root2ImgString = root2Img.toStringAsFixed(2);
+                              }
+                              else{root1 = result[0];
+                              root1String = root1.toStringAsFixed(2);
+                              root2 = result[1];
+                              root2String = root2.toStringAsFixed(2);}
                             });
                           } else {
+                            error = 1;
                             // inputs invalid, so show pop up message
                             showDialog(
                               context: context,
@@ -281,13 +272,13 @@ class _PolynomialPageState extends State<PolynomialPage> {
                             );
 
                             setState(() {
-                              y = [];
-                              t = [];
+                              root1 = 0;
+                              root2 = 0;
                             });
                           }
 
                           debugPrint(
-                              'h = $h, tinit = $tinit, tfinal = $tfinal, yinit = $yinit, y=$y, t=$t');
+                              'root1 = $root1, root2 = $root2');
                         },
                         child: const Text('Calculate')),
                   ],
@@ -321,7 +312,14 @@ class _PolynomialPageState extends State<PolynomialPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            't = ${t.map((double value) => value.toStringAsFixed(1)).join(', ')}',
+                            length == 2
+                                ? error == 0
+                                    ? 'root1 = $root1String'
+                                    : 'No roots'
+                                : length == 4
+                                    ? 'root1 = [$root1String, $root1ImgString i]'
+                                    : 'No roots',
+                            
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,
@@ -330,7 +328,13 @@ class _PolynomialPageState extends State<PolynomialPage> {
                             maxLines: 2,
                           ),
                           AutoSizeText(
-                            'y = ${y.map((double value) => value.toStringAsFixed(2)).join(', ')}',
+                            length == 2
+                                ? error == 0
+                                    ? 'root2 = $root2String'
+                                    : 'No roots'
+                                : length == 4
+                                    ? 'root2 = [$root2String, $root2ImgString i]'
+                                    : 'No roots',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 30,
